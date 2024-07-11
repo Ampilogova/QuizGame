@@ -14,6 +14,8 @@ struct GameSwiftUIView: View {
     @State private var currentCountry: Country?
     @State private var options: [Country] = []
     @State private var score: Int = 0
+    @State private var correctAnswer: Country?
+    @State private var answerSubmitted: Bool = false
     private var flagService: FlagService
     
     init(flagService: FlagService) {
@@ -23,6 +25,7 @@ struct GameSwiftUIView: View {
     var body: some View {
         VStack {
             Text(currentCountry?.emoji ?? "")
+                .lineLimit(2)
                 .font(.system(size: 200))
                 .padding()
             
@@ -53,7 +56,7 @@ struct GameSwiftUIView: View {
                         .font(.body)
                         .padding()
                         .frame(width: 180, height: 60)
-                        .background(Color.blue)
+                        .background(self.buttonColor(for: country))
                         .foregroundColor(.white)
                         .cornerRadius(10)
                 }
@@ -64,18 +67,40 @@ struct GameSwiftUIView: View {
     
     
     private func checkAnswer(country: Country) {
+        if answerSubmitted { return }
+        
+        answerSubmitted = true
+        
         if country.id == currentCountry?.id {
             score += 1
+            correctAnswer = country
         } else {
-            score -= 1
+            correctAnswer = nil
         }
-        nextQuestion()
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+            self.nextQuestion()
+        }
     }
+    
+    private func buttonColor(for country: Country) -> Color {
+        if answerSubmitted {
+            if let correctAnswer = correctAnswer {
+                if country.id == correctAnswer.id {
+                    return .green
+                } else if country.id == currentCountry?.id {
+                    return .red
+                }
+            }
+        }
+        return .blue
+    }
+
     
     private func sendRequest() async {
         do {
             let countries = try await flagService.sendRequest()
-            self.countries = countries
+            self.countries = countries.shuffled()
             if let firstCountry = countries.first {
                 self.currentCountry = firstCountry
                 generateOptions(correctCountry: firstCountry)
@@ -96,9 +121,11 @@ struct GameSwiftUIView: View {
     }
     
     private func nextQuestion() {
+        answerSubmitted = false
         if let newCountry = countries.randomElement() {
             currentCountry = newCountry
             generateOptions(correctCountry: newCountry)
+            correctAnswer = nil
         }
     }
 }
