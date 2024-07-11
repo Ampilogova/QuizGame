@@ -1,13 +1,13 @@
 //
-//  QuizGameUITestsLaunchTests.swift
-//  QuizGameUITests
+//  FlagsQuizGameUITestsLaunchTests.swift
+//  FlagsQuizGameUITests
 //
-//  Created by Tatiana Ampilogova on 7/3/24.
+//  Created by Tatiana Ampilogova on 7/11/24.
 //
 
 import XCTest
 
-final class QuizGameUITestsLaunchTests: XCTestCase {
+final class FlagsQuizGameUITestsLaunchTests: XCTestCase {
 
     override class var runsForEachTargetApplicationUIConfiguration: Bool {
         true

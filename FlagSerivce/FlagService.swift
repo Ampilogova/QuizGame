@@ -1,8 +1,8 @@
 //
 //  FlagService.swift
-//  QuizGame
+//  FlagsQuizGame
 //
-//  Created by Tatiana Ampilogova on 7/3/24.
+//  Created by Tatiana Ampilogova on 7/11/24.
 //
 
 import Foundation
@@ -13,7 +13,8 @@ protocol FlagService {
 
 class FlagServiceImpl: FlagService {
     
-    private let stringURL = "https://restcountries.com/v3.1/all?fields=flags"
+    private let stringURL = "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/index.json"
+    
     private let networkService: NetworkService
     
     init(networkService: NetworkService) {
@@ -25,11 +26,10 @@ class FlagServiceImpl: FlagService {
             return []
         }
         let urlRequest = URLRequest(url: url)
-        var request = NetworkRequest(url: urlRequest)
+        let request = NetworkRequest(url: urlRequest)
         let data = try await networkService.send(request: request)
         let decoder = JSONDecoder()
-        let generateResponse = try decoder.decode(GenerateResponse.self, from: data)
-        let countries = [Country()]
+        let countries =  try decoder.decode([Country].self, from: data)
         return countries
     }
 }

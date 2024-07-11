@@ -1,14 +1,14 @@
 //
-//  QuizGameTests.swift
-//  QuizGameTests
+//  FlagsQuizGameTests.swift
+//  FlagsQuizGameTests
 //
-//  Created by Tatiana Ampilogova on 7/3/24.
+//  Created by Tatiana Ampilogova on 7/11/24.
 //
 
 import XCTest
-@testable import QuizGame
+@testable import FlagsQuizGame
 
-final class QuizGameTests: XCTestCase {
+final class FlagsQuizGameTests: XCTestCase {
 
     override func setUpWithError() throws {
         // Put setup code here. This method is called before the invocation of each test method in the class.

@@ -1,8 +1,8 @@
 //
 //  NetworkRequest.swift
-//  QuizGame
+//  FlagsQuizGame
 //
-//  Created by Tatiana Ampilogova on 7/3/24.
+//  Created by Tatiana Ampilogova on 7/11/24.
 //
 
 import Foundation
