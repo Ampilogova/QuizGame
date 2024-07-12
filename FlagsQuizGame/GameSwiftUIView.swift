@@ -88,7 +88,7 @@ struct GameSwiftUIView: View {
             if let correctAnswer = correctAnswer {
                 if country.id == correctAnswer.id {
                     return .green
-                } else if country.id == currentCountry?.id {
+                } else if country.id != currentCountry?.id {
                     return .red
                 }
             }
@@ -100,8 +100,8 @@ struct GameSwiftUIView: View {
     private func sendRequest() async {
         do {
             let countries = try await flagService.sendRequest()
-            self.countries = countries.shuffled()
-            if let firstCountry = countries.first {
+            self.countries = countries
+            if let firstCountry = countries.randomElement() {
                 self.currentCountry = firstCountry
                 generateOptions(correctCountry: firstCountry)
             }
