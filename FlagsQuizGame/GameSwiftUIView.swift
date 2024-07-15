@@ -8,27 +8,26 @@
 import SwiftUI
 
 struct GameSwiftUIView: View {
-    
+
     @State private var countries: [Country] = []
-    
     @State private var currentCountry: Country?
+    @State private var selectedOption: Country?
     @State private var options: [Country] = []
     @State private var score: Int = 0
-    @State private var correctAnswer: Country?
     @State private var answerSubmitted: Bool = false
     private var flagService: FlagService
-    
+
     init(flagService: FlagService) {
         self.flagService = flagService
     }
-    
+
     var body: some View {
         VStack {
             Text(currentCountry?.emoji ?? "")
                 .lineLimit(2)
                 .font(.system(size: 200))
                 .padding()
-            
+
             HStack(spacing: 10) {
                 Spacer()
                 buttonStack(for: Array(options.prefix(2)))
@@ -36,7 +35,7 @@ struct GameSwiftUIView: View {
                 Spacer()
             }
             .padding(.horizontal, 20)
-            
+
             Text("Score: \(score)")
                 .font(.title2)
                 .padding(.top)
@@ -45,17 +44,18 @@ struct GameSwiftUIView: View {
             await sendRequest()
         }
     }
-    
+
     private func buttonStack(for countries: [Country]) -> some View {
         VStack(spacing: 5) {
             ForEach(countries) { country in
                 Button(action: {
+                    self.selectedOption = country
                     self.checkAnswer(country: country)
                 }) {
                     Text(country.name)
                         .font(.body)
                         .padding()
-                        .frame(width: 180, height: 60)
+                        .frame(width: 180, height: 80)
                         .background(self.buttonColor(for: country))
                         .foregroundColor(.white)
                         .cornerRadius(10)
@@ -64,39 +64,30 @@ struct GameSwiftUIView: View {
             }
         }
     }
-    
-    
+
     private func checkAnswer(country: Country) {
         if answerSubmitted { return }
-        
+
         answerSubmitted = true
-        
+
         if country.id == currentCountry?.id {
             score += 1
-            correctAnswer = country
-        } else {
-            correctAnswer = nil
         }
-        
+
         DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
             self.nextQuestion()
         }
     }
-    
+
     private func buttonColor(for country: Country) -> Color {
         if answerSubmitted {
-            if let correctAnswer = correctAnswer {
-                if country.id == correctAnswer.id {
-                    return .green
-                } else if country.id != currentCountry?.id {
-                    return .red
-                }
+            if country.id == selectedOption?.id {
+                return country.id == currentCountry?.id ? .green : .red
             }
         }
         return .blue
     }
 
-    
     private func sendRequest() async {
         do {
             let countries = try await flagService.sendRequest()
@@ -109,23 +100,23 @@ struct GameSwiftUIView: View {
             print("Failed to send request: \(error)")
         }
     }
-    
+
     private func generateOptions(correctCountry: Country) {
         var tempOptions = countries.shuffled().prefix(3)
-        
+
         if !tempOptions.contains(where: { $0.id == correctCountry.id }) {
             tempOptions.append(correctCountry)
         }
-        
+
         options = Array(tempOptions).shuffled()
     }
-    
+
     private func nextQuestion() {
         answerSubmitted = false
         if let newCountry = countries.randomElement() {
             currentCountry = newCountry
             generateOptions(correctCountry: newCountry)
-            correctAnswer = nil
         }
     }
 }
+
