@@ -18,6 +18,8 @@
 		CEE23ACD2C404D110029D0BE /* Country.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEE23ACC2C404D110029D0BE /* Country.swift */; };
 		CEE23AD22C4061AD0029D0BE /* GameSwiftUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEE23AD12C4061AD0029D0BE /* GameSwiftUIView.swift */; };
 		CEE23AD42C4064610029D0BE /* FlagsQuizApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEE23AD32C4064610029D0BE /* FlagsQuizApp.swift */; };
+		CEE23AD62C483D340029D0BE /* MenuSwiftUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEE23AD52C483D340029D0BE /* MenuSwiftUIView.swift */; };
+		CEE23ADA2C48430E0029D0BE /* DifficultyLevel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEE23AD92C48430E0029D0BE /* DifficultyLevel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -53,6 +55,8 @@
 		CEE23ACC2C404D110029D0BE /* Country.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Country.swift; sourceTree = "<group>"; };
 		CEE23AD12C4061AD0029D0BE /* GameSwiftUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameSwiftUIView.swift; sourceTree = "<group>"; };
 		CEE23AD32C4064610029D0BE /* FlagsQuizApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlagsQuizApp.swift; sourceTree = "<group>"; };
+		CEE23AD52C483D340029D0BE /* MenuSwiftUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuSwiftUIView.swift; sourceTree = "<group>"; };
+		CEE23AD92C48430E0029D0BE /* DifficultyLevel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DifficultyLevel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -106,6 +110,8 @@
 			isa = PBXGroup;
 			children = (
 				CEE23AD32C4064610029D0BE /* FlagsQuizApp.swift */,
+				CEE23AD52C483D340029D0BE /* MenuSwiftUIView.swift */,
+				CEE23AD92C48430E0029D0BE /* DifficultyLevel.swift */,
 				CEE23AD12C4061AD0029D0BE /* GameSwiftUIView.swift */,
 				CEE23A9E2C404C940029D0BE /* Assets.xcassets */,
 				CEE23AA02C404C940029D0BE /* LaunchScreen.storyboard */,
@@ -284,7 +290,9 @@
 				CEE23AD42C4064610029D0BE /* FlagsQuizApp.swift in Sources */,
 				CEE23AD22C4061AD0029D0BE /* GameSwiftUIView.swift in Sources */,
 				CEE23AC62C404CB80029D0BE /* NetworkService.swift in Sources */,
+				CEE23ADA2C48430E0029D0BE /* DifficultyLevel.swift in Sources */,
 				CEE23AC82C404CD50029D0BE /* NetworkRequest.swift in Sources */,
+				CEE23AD62C483D340029D0BE /* MenuSwiftUIView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

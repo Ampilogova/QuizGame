@@ -11,7 +11,8 @@ import SwiftUI
 struct FlagsQuizApp: App {
     var body: some Scene {
         WindowGroup {
-            GameSwiftUIView(flagService: FlagServiceImpl(networkService: NetworkServiceImpl()))
+//            GameSwiftUIView(flagService: FlagServiceImpl(networkService: NetworkServiceImpl()))
+            MenuSwiftUIView()
         }
     }
 }
