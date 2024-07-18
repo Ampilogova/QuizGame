@@ -19,4 +19,11 @@ enum DifficultyLevel: CaseIterable {
         case .hard: return "Hard"
         }
     }
+    var level: Int {
+        switch self {
+        case .easy: return 2
+        case .medium: return 4
+        case .hard: return 1
+        }
+    }
 }

@@ -9,16 +9,19 @@ import SwiftUI
 
 struct MenuSwiftUIView: View {
     
+    let flagService: FlagService
+    @State private var selectedLevel: DifficultyLevel?
+    
     var body: some View {
-        chooseComplexityButton
+        NavigationStack {
+            chooseComplexityButton
+        }
     }
     
     @ViewBuilder var chooseComplexityButton: some View {
         VStack {
             ForEach(DifficultyLevel.allCases, id: \.self) { level in
-                Button {
-                    //To do something
-                } label: {
+                NavigationLink(destination: GameSwiftUIView(flagService: flagService, difficultyLevel: level)) {
                     Text(level.title)
                         .font(.body)
                         .padding()

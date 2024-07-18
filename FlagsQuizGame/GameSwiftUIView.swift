@@ -15,10 +15,13 @@ struct GameSwiftUIView: View {
     @State private var options: [Country] = []
     @State private var score: Int = 0
     @State private var answerSubmitted: Bool = false
+    @State private var country: String = ""
     private var flagService: FlagService
+    var difficultyLevel: DifficultyLevel
 
-    init(flagService: FlagService) {
+    init(flagService: FlagService, difficultyLevel: DifficultyLevel) {
         self.flagService = flagService
+        self.difficultyLevel = difficultyLevel
     }
 
     var body: some View {
@@ -29,10 +32,35 @@ struct GameSwiftUIView: View {
                 .padding()
 
             HStack(spacing: 10) {
-                Spacer()
-                buttonStack(for: Array(options.prefix(2)))
-                buttonStack(for: Array(options.suffix(2)))
-                Spacer()
+                switch difficultyLevel {
+                case .easy:
+                    Spacer()
+                    buttonStack(for: Array(options.prefix(DifficultyLevel.easy.level / 2)))
+                    buttonStack(for: Array(options.suffix(DifficultyLevel.easy.level / 2)))
+                    Spacer()
+                case .medium:
+                    Spacer()
+                    buttonStack(for: Array(options.prefix(DifficultyLevel.medium.level / 2)))
+                    buttonStack(for: Array(options.suffix(DifficultyLevel.medium.level / 2)))
+                    Spacer()
+                case .hard:
+                    HStack {
+                        Spacer()
+                        TextField("Enter the country name", text: $country, axis: .vertical)
+                            .textFieldStyle(.roundedBorder)
+                        Button {
+                            checkAnswer(country: Country(emoji: "", name: country))
+                        } label: {
+                            Text("Send")
+                                .font(.title3)
+                                .foregroundColor(.white)
+                                .padding(.horizontal, 10) // Add horizontal padding
+                                .padding(.vertical, 5)   // Add vertical padding
+                                .background(Color.blue)
+                                .cornerRadius(8)
+                        }
+                    }
+                }
             }
             .padding(.horizontal, 20)
 
@@ -94,15 +122,15 @@ struct GameSwiftUIView: View {
             self.countries = countries
             if let firstCountry = countries.randomElement() {
                 self.currentCountry = firstCountry
-                generateOptions(correctCountry: firstCountry)
+                generateOptions(difficultyLevel: difficultyLevel, correctCountry: firstCountry)
             }
         } catch {
             print("Failed to send request: \(error)")
         }
     }
 
-    private func generateOptions(correctCountry: Country) {
-        var tempOptions = countries.shuffled().prefix(3)
+    private func generateOptions(difficultyLevel: DifficultyLevel, correctCountry: Country) {
+        var tempOptions = countries.shuffled().prefix(difficultyLevel.level)
 
         if !tempOptions.contains(where: { $0.id == correctCountry.id }) {
             tempOptions.append(correctCountry)
@@ -115,7 +143,7 @@ struct GameSwiftUIView: View {
         answerSubmitted = false
         if let newCountry = countries.randomElement() {
             currentCountry = newCountry
-            generateOptions(correctCountry: newCountry)
+            generateOptions(difficultyLevel: difficultyLevel, correctCountry: newCountry)
         }
     }
 }
