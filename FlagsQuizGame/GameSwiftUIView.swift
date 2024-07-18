@@ -15,7 +15,7 @@ struct GameSwiftUIView: View {
     @State private var options: [Country] = []
     @State private var score: Int = 0
     @State private var answerSubmitted: Bool = false
-    @State private var country: String = ""
+    @State private var countryTextField: String = ""
     private var flagService: FlagService
     var difficultyLevel: DifficultyLevel
 
@@ -33,33 +33,12 @@ struct GameSwiftUIView: View {
 
             HStack(spacing: 10) {
                 switch difficultyLevel {
-                case .easy:
+                case .easy, .medium:
                     Spacer()
-                    buttonStack(for: Array(options.prefix(DifficultyLevel.easy.level / 2)))
-                    buttonStack(for: Array(options.suffix(DifficultyLevel.easy.level / 2)))
-                    Spacer()
-                case .medium:
-                    Spacer()
-                    buttonStack(for: Array(options.prefix(DifficultyLevel.medium.level / 2)))
-                    buttonStack(for: Array(options.suffix(DifficultyLevel.medium.level / 2)))
+                    buttonsForLevel(difficultyLevel)
                     Spacer()
                 case .hard:
-                    HStack {
-                        Spacer()
-                        TextField("Enter the country name", text: $country, axis: .vertical)
-                            .textFieldStyle(.roundedBorder)
-                        Button {
-                            checkAnswer(country: Country(emoji: "", name: country))
-                        } label: {
-                            Text("Send")
-                                .font(.title3)
-                                .foregroundColor(.white)
-                                .padding(.horizontal, 10) // Add horizontal padding
-                                .padding(.vertical, 5)   // Add vertical padding
-                                .background(Color.blue)
-                                .cornerRadius(8)
-                        }
-                    }
+                    hardModeView
                 }
             }
             .padding(.horizontal, 20)
@@ -70,6 +49,33 @@ struct GameSwiftUIView: View {
         }
         .task {
             await sendRequest()
+        }
+    }
+    
+    private func buttonsForLevel(_ level: DifficultyLevel) -> some View {
+        let halfOprionsCount = level.level / 2
+        return HStack {
+            buttonStack(for: Array(options.prefix(halfOprionsCount)))
+            buttonStack(for: Array(options.suffix(halfOprionsCount)))
+        }
+    }
+    
+    private var hardModeView: some View {
+        HStack {
+            Spacer()
+            TextField("Enter the country name", text: $countryTextField, axis: .vertical)
+                .textFieldStyle(.roundedBorder)
+            Button {
+                checkAnswer(country: Country(emoji: "", name: countryTextField))
+            } label: {
+                Text("Send")
+                    .font(.title3)
+                    .foregroundColor(.white)
+                    .padding(.horizontal, 10)
+                    .padding(.vertical, 5)
+                    .background(Color.blue)
+                    .cornerRadius(8)
+            }
         }
     }
 
@@ -98,9 +104,10 @@ struct GameSwiftUIView: View {
 
         answerSubmitted = true
 
-        if country.id == currentCountry?.id {
+        if country.name == currentCountry?.name {
             score += 1
         }
+        countryTextField = ""
 
         DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
             self.nextQuestion()
@@ -132,8 +139,8 @@ struct GameSwiftUIView: View {
     private func generateOptions(difficultyLevel: DifficultyLevel, correctCountry: Country) {
         var tempOptions = countries.shuffled().prefix(difficultyLevel.level)
 
-        if !tempOptions.contains(where: { $0.id == correctCountry.id }) {
-            tempOptions.append(correctCountry)
+        if !tempOptions.contains(where: { $0.name == correctCountry.name }) {
+            tempOptions[0] = correctCountry
         }
 
         options = Array(tempOptions).shuffled()
